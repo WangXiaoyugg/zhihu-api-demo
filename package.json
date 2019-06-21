@@ -1,0 +1,21 @@
+{
+  "name": "zhihu-api",
+  "version": "1.0.0",
+  "description": "仿知乎api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "koa",
+    "resful",
+    "api",
+    "zhihu"
+  ],
+  "author": "garen",
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.7.0"
+  }
+}
