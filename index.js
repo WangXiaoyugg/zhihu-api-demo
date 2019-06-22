@@ -1,27 +1,35 @@
-const Koa = require("koa")
-const app = new Koa()
+const Koa = require("koa");
+const Router = require("koa-router");
+const app = new Koa();
+const router = new Router();
+const userRouter = new Router({ prefix: "/users" });
 
-app.use((ctx) => {
-    if(ctx.url === '/') {
-        ctx.body = "这是首页"
-    } else if(ctx.url === '/users') {
-        if(ctx.method === "GET") {
-            ctx.body = "这是用户列表页"
-        } else if(ctx.method === "POST") {
-            ctx.body = "创建用户"
-        } else {
-            ctx.status = 405
-        }
-    } else if (ctx.url.match(/\/users\/(\w+)/) && ctx.method === "GET") {
-        let userId = ctx.url.match(/\/users\/(\w+)/)[1];
-        ctx.body = `用户id是 ${userId}`
-    } 
-    
-    else {
-        ctx.status = 404
-    }
-})
+const auth = async ctx => {
+  if (ctx.url !== "/users") {
+    ctx.throw();
+  }
+  await next();
+};
 
-app.listen(8000,() => {
-    console.log("server is start at localhost:8000")
-})
+router.get("/", ctx => {
+  ctx.body = "首页";
+});
+
+userRouter.get("/", auth, ctx => {
+  ctx.body = "用户列表页";
+});
+
+userRouter.post("/", auth, ctx => {
+  ctx.body = "创建用户";
+});
+
+userRouter.get("/:id", auth, ctx => {
+  ctx.body = `用户的id是 ${ctx.params.id}`;
+});
+
+app.use(router.routes());
+app.use(userRouter.routes());
+
+app.listen(8000, () => {
+  console.log("server is start at localhost:8000");
+});

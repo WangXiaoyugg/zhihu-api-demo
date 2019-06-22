@@ -16,7 +16,8 @@
   "author": "garen",
   "license": "MIT",
   "dependencies": {
-    "koa": "^2.7.0"
+    "koa": "^2.7.0",
+    "koa-router": "^7.4.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
