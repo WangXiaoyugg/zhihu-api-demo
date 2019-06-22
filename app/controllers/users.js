@@ -5,8 +5,11 @@ class UserController {
         ctx.body = db;
     }
     findById(ctx) {
-        let user = db[ctx.params.id * 1];
-        ctx.body = user;
+        if(ctx.params.id * 1 >= db.length) {
+            ctx.throw(412, `id 必须小于等于 ${db.length}`)
+            return;
+        }
+        ctx.body = db[ctx.params.id * 1];
     }
     create(ctx) {
         db.push(ctx.request.body);
