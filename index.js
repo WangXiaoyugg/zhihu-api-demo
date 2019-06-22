@@ -29,6 +29,7 @@ userRouter.get("/:id", auth, ctx => {
 
 app.use(router.routes());
 app.use(userRouter.routes());
+app.use(router.allowedMethods());
 
 app.listen(8000, () => {
   console.log("server is start at localhost:8000");
