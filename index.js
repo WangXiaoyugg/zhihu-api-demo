@@ -1,19 +1,13 @@
 const Koa = require("koa");
 const bodyParser = require("koa-bodyparser");
+const error = require("koa-json-error");
 const registerRouter = require("./app/routes");
 const app = new Koa();
 
-app.use(async (ctx, next) => {
-  try {
-    await next();
-  } catch(err) {
-    ctx.status = err.status || err.statusCode || 500;
-    ctx.body = {
-      message: err.message
-    }
-  }
-})
 
+app.use(error({
+  postFormat: (e, {stack, ...rest}) => process.env.NODE_ENV === 'production' ? rest : {stack, ...rest},
+}));
 app.use(bodyParser());
 registerRouter(app);
 

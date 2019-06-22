@@ -6,7 +6,7 @@ class UserController {
     }
     findById(ctx) {
         if(ctx.params.id * 1 >= db.length) {
-            ctx.throw(412, `id 必须小于等于 ${db.length}`)
+            ctx.throw(412)
             return;
         }
         ctx.body = db[ctx.params.id * 1];

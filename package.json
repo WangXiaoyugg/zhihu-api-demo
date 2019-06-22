@@ -4,7 +4,8 @@
   "description": "仿知乎api",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "prod": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js"
   },
   "keywords": [
     "node",
@@ -18,9 +19,11 @@
   "dependencies": {
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
+    "koa-json-error": "^3.1.2",
     "koa-router": "^7.4.0"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "nodemon": "^1.19.1"
   }
 }
