@@ -4,10 +4,10 @@ const app = new Koa();
 const router = new Router();
 const userRouter = new Router({ prefix: "/users" });
 
-const auth = async ctx => {
-  if (ctx.url !== "/users") {
-    ctx.throw();
-  }
+const auth = async(ctx, next) => {
+  if(ctx.url.indexOf('users') < 0) {
+    ctx.throw()
+  }  
   await next();
 };
 
@@ -16,16 +16,25 @@ router.get("/", ctx => {
 });
 
 userRouter.get("/", auth, ctx => {
-  ctx.body = "用户列表页";
+  ctx.body = [{name: '李雷'}]
 });
 
 userRouter.post("/", auth, ctx => {
-  ctx.body = "创建用户";
+  ctx.body = {name: '韩梅梅'}
 });
 
 userRouter.get("/:id", auth, ctx => {
-  ctx.body = `用户的id是 ${ctx.params.id}`;
+  ctx.body = {name: '李雷'}
 });
+
+userRouter.put("/:id", auth, ctx => {
+    ctx.body = {name: '李雷2'}
+});
+
+userRouter.delete("/:id", auth, ctx => {
+    ctx.status = 204;
+});
+
 
 app.use(router.routes());
 app.use(userRouter.routes());
