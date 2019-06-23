@@ -1,4 +1,6 @@
+const jwt = require("jsonwebtoken");
 const User = require("../models/users");
+const {secret, options} = require('../../config/jwt')
 
 class UserController {
     async find(ctx) {
@@ -34,6 +36,17 @@ class UserController {
         if(!user) {ctx.throw(404, 'user not exsit')}
         ctx.status = 204;
     }
+    async login(ctx) {
+        ctx.verifyParams({
+            name: {type: 'string', required: true},
+            password: {type: 'string', required: true},
+        })
+        const user = await User.findOne(ctx.request.body);
+        if(!user) {ctx.throw(401, 'username or password is error')}
+        let {name, _id} = user;
+        const token = jwt.sign({name, _id}, secret, options);
+        ctx.body = {token};
+    } 
 }
 
 module.exports = new UserController()
