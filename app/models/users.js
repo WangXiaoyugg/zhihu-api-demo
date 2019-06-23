@@ -27,7 +27,7 @@ const userSchema = {
         select: false
     },
     following: {
-        type: [{type: Schema.Types.ObjectId, ref: 'USer'}],
+        type: [{type: Schema.Types.ObjectId, ref: 'User'}],
         select: false,
     }
 }
