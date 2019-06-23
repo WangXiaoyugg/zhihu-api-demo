@@ -3,6 +3,12 @@ const User = require("../models/users");
 const {secret, options} = require('../../config/jwt')
 
 class UserController {
+    async checkOwner(ctx, next) {
+        if(ctx.params.id !== ctx.state.user._di) {
+            ctx.throw(403, 'user doesn"t have access right')
+        }
+        await next()
+    }
     async find(ctx) {
         ctx.body = await User.find();
     }
