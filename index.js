@@ -8,7 +8,7 @@ const {mongo} = require('./config/db')
 const registerRouter = require("./app/routes");
 const app = new Koa();
 
-mongoose.connect(mongo.url, {useNewUrlParser: true}, () => {console.log("MongoDB connect success!")});
+mongoose.connect(mongo.url, {useNewUrlParser: true, useFindAndModify: false}, () => {console.log("MongoDB connect success!")});
 mongoose.connection.on("error", console.error.bind(console, 'connection error:'));
 
 app.use(error({
