@@ -4,4 +4,4 @@ const userSchema = {
     name: {type: String, required: true},
 }
 
-model("User", userSchema)
+module.exports = model("User", userSchema)
