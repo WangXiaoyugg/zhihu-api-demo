@@ -13,7 +13,10 @@ class UserController {
         ctx.body = await User.find();
     }
     async findById(ctx) {
-        const user = await User.findById(ctx.params.id);
+        const { fields } = ctx.query;
+        const selectFields = fields.split(";").filter(f => f).map(f => " +" + f).join("");
+        console.log("selectFields: ", selectFields);
+        const user = await User.findById(ctx.params.id).select(selectFields);
         if(!user) {ctx.throw(404, "user not exist")}
         ctx.body = user;
     }
