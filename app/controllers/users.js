@@ -4,7 +4,7 @@ const {secret, options} = require('../../config/jwt')
 
 class UserController {
     async checkOwner(ctx, next) {
-        if(ctx.params.id !== ctx.state.user._di) {
+        if(ctx.params.id !== ctx.state.user._id) {
             ctx.throw(403, 'user doesn"t have access right')
         }
         await next()
