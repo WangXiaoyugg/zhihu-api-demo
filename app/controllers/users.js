@@ -69,6 +69,10 @@ class UserController {
         if(!user) {ctx.throw(404, 'user not exsits')};
         ctx.body = user.following;
     }
+    async listFollowers(ctx) {
+        const users = await User.find({following: ctx.params.id});
+        ctx.body = users;
+    }
     async follow(ctx) {
         const me = await User.findById(ctx.state.user._id).select("+following");
         
@@ -77,7 +81,15 @@ class UserController {
             me.save();
         }
         ctx.status = 204;
-
+    }   
+    async unfollow(ctx) {
+        const me = await User.findById(ctx.state.user._id).select("+following");
+        const index = me.following.map(id => id.toString()).indexOf(ctx.params.id);
+        if(index > - 1) {
+            me.following.splice(index, 1);
+            me.save();
+        }
+        ctx.status = 204;
     }   
 }
 
