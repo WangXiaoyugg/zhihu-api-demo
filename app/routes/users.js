@@ -5,7 +5,7 @@ const { secret } = require("../../config/jwt")
 const {
     find, findById, create, 
     update, deleteById, login,
-    checkOwner,
+    checkOwner,listFollowing, follow
 } = require("../controllers/users")
 const router = new Router({ prefix: "/users" });
 
@@ -21,6 +21,10 @@ router.patch("/:id", auth, checkOwner, update);
 
 router.delete("/:id", auth, checkOwner, deleteById);
 
-router.post("/login", login)
+router.post("/login", login);
+
+router.get("/:id/following", listFollowing);
+
+router.put("/following/:id", auth, follow);
 
 module.exports = router;
