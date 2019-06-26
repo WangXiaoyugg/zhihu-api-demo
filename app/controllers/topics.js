@@ -12,6 +12,11 @@ class TopicController {
             .find({name: new RegExp(ctx.query.q)})
             .limit(perPage).skip(page * perPage)
     }
+    async checkTopicExists(ctx, next) {
+        const topic = await Topic.findById(ctx.params.id);
+        if(!topic) {ctx.throw(404, 'topic not exsits')}
+        await next()
+    }
     async findById(ctx) {
         const {fields = ""} = ctx.query
         const selectFields = fields.split(";").filter(f => f).map(f => " +" + f).join("")
@@ -36,6 +41,10 @@ class TopicController {
         // findByIdAndUpdate 返回的topic 是更新前的
         const topic = await Topic.findByIdAndUpdate(ctx.params.id, ctx.request.body)
         ctx.body = topic
+    }
+    async listTopicFollowers(ctx) {
+        const users = await User.find({followingTopics: ctx.params.id});
+        ctx.body = users;
     }
 }
 
