@@ -2,7 +2,11 @@ const Router = require("koa-router");
 const jwt = require("koa-jwt");
 
 const { secret } = require("../../config/jwt");
-const { find, create, findById, update, checkTopicExists, listTopicFollowers } = require("../controllers/topics");
+const { 
+    find, create, findById, update, 
+    checkTopicExists, listTopicFollowers,
+    listQuestions,
+} = require("../controllers/topics");
 const router = new Router({ prefix: "/topics" });
 
 const auth = jwt({ secret });
@@ -16,5 +20,7 @@ router.get("/:id", checkTopicExists, findById);
 router.patch("/:id", auth, checkTopicExists, update);
 
 router.get("/:id/followers", auth, checkTopicExists, listTopicFollowers);
+router.get("/:id/questions", auth, checkTopicExists, listQuestions);
+
 
 module.exports = router;

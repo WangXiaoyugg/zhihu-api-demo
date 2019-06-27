@@ -21,7 +21,7 @@ class QuestionController {
     async findById(ctx) {
         const {fields = ""} = ctx.query
         const selectFields = fields.split(";").filter(f => f).map(f => " +" + f).join("")
-        const question = await Question.findById(ctx.params.id).select(selectFields).populate("questioner")
+        const question = await Question.findById(ctx.params.id).select(selectFields).populate("questioner topics")
         ctx.body = question
     }
     async create(ctx) {
@@ -41,21 +41,18 @@ class QuestionController {
     }
     async update(ctx) {
         ctx.verifyParams({
-            title: {type: 'string', required: true},
-            description: {type: 'string', required: false},    
+            title: {type: 'string', required: false},
+            description: {type: 'string', required: false}, 
+            topics: {type: 'array', itemType: "string", required: false},   
         })
         // findByIdAndUpdate 返回的 question 是更新前的
-        await ctx.state.question.update(ctx.request.body)
+        await ctx.state.question.updateOne(ctx.request.body)
         ctx.body = ctx.state.question
     }
     async deleteById(ctx) {
         await Question.findByIdAndRemove(ctx.params.id)
         ctx.status = 204
     }
-    // async listTopicFollowers(ctx) {
-    //     const users = await User.find({followingTopics: ctx.params.id});
-    //     ctx.body = users;
-    // }
 }
 
 module.exports = new QuestionController()
