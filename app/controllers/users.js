@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
+const Question = require("../models/questions");
+
 const {secret, options} = require('../../config/jwt')
 
 class UserController {
@@ -131,7 +133,12 @@ class UserController {
             me.save();
         }
         ctx.status = 204;
-    }    
+    }
+    
+    async listQuestions(ctx) {
+        const questions = await Question.find({questioner: ctx.params.id})
+        ctx.body = questions;
+    } 
 }
 
 module.exports = new UserController()
