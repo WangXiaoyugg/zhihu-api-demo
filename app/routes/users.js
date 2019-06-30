@@ -1,21 +1,37 @@
 const Router = require("koa-router");
 const jwt = require("koa-jwt");
 
-const { secret } = require("../../config/jwt")
+const { secret } = require("../../config/jwt");
 const {
-    find, findById, create, 
-    update, deleteById, login,
-    checkOwner,listFollowing, follow,
-    unfollow, listFollowers, checkUserExist,
-    unfollowTopic, followTopic,
-    listFollowingTopics,
-    listQuestions,
-} = require("../controllers/users")
+  find,
+  findById,
+  create,
+  update,
+  deleteById,
+  login,
+  checkOwner,
+  listFollowing,
+  follow,
+  unfollow,
+  listFollowers,
+  checkUserExist,
+  unfollowTopic,
+  followTopic,
+  listFollowingTopics,
+  listQuestions,
+  listLikingAnswers,
+  likeAnswer,
+  unlikeAnswer,
+  listDislikingAnswers,
+  dislikeAnswer,
+  unDislikeAnswer
+} = require("../controllers/users");
 const router = new Router({ prefix: "/users" });
 
-const { checkTopicExists } = require("../controllers/topics")
+const { checkTopicExists } = require("../controllers/topics");
+const { checkAnswerExists } = require("../controllers/answers");
 
-const auth = jwt({secret});
+const auth = jwt({ secret });
 
 router.get("/", find);
 
@@ -41,5 +57,15 @@ router.put("/followingTopics/:id", auth, checkTopicExists, followTopic);
 router.delete("/followingTopics/:id", auth, checkTopicExists, unfollowTopic);
 
 router.get("/:id/questions", listQuestions);
+
+// 赞答案
+router.get("/:id/likingAnswers", listLikingAnswers);
+router.put("/:id/likingAnswers/:id", auth, checkAnswerExists, likeAnswer, unDislikeAnswer);
+router.delete("/:id/likingAnswers/:id", auth, checkAnswerExists, unlikeAnswer);
+
+// 踩答案
+router.get("/:id/dislikingAnswers", listDislikingAnswers);
+router.put("/:id/dislikingAnswers/:id", auth, checkAnswerExists, dislikeAnswer, unlikeAnswer);
+router.delete("/:id/dislikingAnswers/:id", auth, checkAnswerExists, unDislikeAnswer);
 
 module.exports = router;
