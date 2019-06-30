@@ -7,10 +7,11 @@ class CommentController {
         const perPage = Math.max(per_page * 1, 1)
         const q = new RegExp(ctx.query.q)
         const {questionId, answerId} = ctx.params;
+        const { rootCommentId } = ctx.query;
         ctx.body = await Comment
-            .find({content: q, questionId, answerId})
+            .find({content: q, questionId, answerId, rootCommentId})
             .limit(perPage).skip(page * perPage)
-            .populate("commentator")
+            .populate("commentator replyTo")
     }
     async checkCommentExists(ctx, next) {
         const comment = await Comment.findById(ctx.params.id).select("+commentator");
@@ -34,6 +35,8 @@ class CommentController {
     async create(ctx) {
         ctx.verifyParams({
             content: {type: 'string', required: true},
+            rootCommentId: {type: 'string', required: false},
+            replyTo: {type: 'string', required: false},
         })
         const commentator = ctx.state.user._id;
         const {questionId, answerId} = ctx.params;
@@ -51,10 +54,14 @@ class CommentController {
         ctx.verifyParams({
             content: {type: 'string', required: false},
         })
+        // 只允许更新content属性
+        const {content} = ctx.request.body
+
         // findByIdAndUpdate 返回的 comment 是更新前的
-        await ctx.state.comment.updateOne(ctx.request.body)
+        await ctx.state.comment.updateOne({content})
         ctx.body = ctx.state.comment
     }
+
     async deleteById(ctx) {
         await Comment.findByIdAndRemove(ctx.params.id)
         ctx.status = 204
