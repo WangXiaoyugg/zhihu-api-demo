@@ -24,7 +24,10 @@ const {
   unlikeAnswer,
   listDislikingAnswers,
   dislikeAnswer,
-  unDislikeAnswer
+  unDislikeAnswer,
+  listCollectingAnswers,
+  collectAnswer,
+  unCollectAnswer,
 } = require("../controllers/users");
 const router = new Router({ prefix: "/users" });
 
@@ -67,5 +70,10 @@ router.delete("/:id/likingAnswers/:id", auth, checkAnswerExists, unlikeAnswer);
 router.get("/:id/dislikingAnswers", listDislikingAnswers);
 router.put("/:id/dislikingAnswers/:id", auth, checkAnswerExists, dislikeAnswer, unlikeAnswer);
 router.delete("/:id/dislikingAnswers/:id", auth, checkAnswerExists, unDislikeAnswer);
+
+// 答案收藏
+router.get("/:id/collectingAnswers", listCollectingAnswers);
+router.put("/:id/collectingAnswers/:id", auth, checkAnswerExists, collectAnswer);
+router.delete("/:id/collectingAnswers/:id", auth, checkAnswerExists, unCollectAnswer);
 
 module.exports = router;
